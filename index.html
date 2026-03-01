@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xuhi Ahmed | Senior Laravel Developer</title>
+<title>Zuhair Ahmed | Senior Laravel Developer</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -13,53 +13,67 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+font-family:Poppins;
 }
 
 body{
 background:#0f172a;
 color:white;
-scroll-behavior:smooth;
 }
 
-header{
+nav{
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
+background:#020617;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+}
+
+.hero{
 text-align:center;
 padding:80px 20px;
 }
 
-header h1{
-font-size:42px;
+.hero img{
+width:140px;
+border-radius:50%;
+border:4px solid #38bdf8;
 }
 
-header p{
+.hero h1{
+margin-top:20px;
+font-size:40px;
+}
+
+.hero p{
 color:#94a3b8;
 margin-top:10px;
 }
 
 .btn{
 background:#22c55e;
-padding:12px 22px;
+padding:12px 20px;
 border-radius:8px;
 text-decoration:none;
 color:white;
 margin:10px;
 display:inline-block;
-transition:.3s;
-}
-
-.btn:hover{
-transform:scale(1.05);
 }
 
 section{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 padding:60px 20px;
 }
 
 h2{
-margin-bottom:20px;
 color:#38bdf8;
+margin-bottom:20px;
 }
 
 .skills span{
@@ -70,23 +84,32 @@ display:inline-block;
 border-radius:8px;
 }
 
-.project{
-background:#1e293b;
-padding:25px;
-margin-top:20px;
-border-radius:12px;
-transition:.3s;
+.projects{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
 }
 
-.project:hover{
-transform:translateY(-5px);
+.card{
+background:#1e293b;
+border-radius:12px;
+overflow:hidden;
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.card div{
+padding:20px;
 }
 
 footer{
-text-align:center;
-padding:30px;
 background:#020617;
-margin-top:50px;
+text-align:center;
+padding:25px;
 }
 
 .whatsapp{
@@ -94,11 +117,11 @@ position:fixed;
 bottom:20px;
 right:20px;
 background:#25D366;
-padding:15px 18px;
+padding:15px;
 border-radius:50%;
 color:white;
-font-size:20px;
 text-decoration:none;
+font-size:20px;
 }
 
 </style>
@@ -106,25 +129,41 @@ text-decoration:none;
 
 <body>
 
-<header>
-<h1>Xuhi Ahmed</h1>
-<p>Senior Laravel Backend Developer | SaaS Architect</p>
+<nav>
+<h3>Zuhair Ahmed</h3>
+<div>
+<a href="#about">About</a>
+<a href="#projects">Projects</a>
+<a href="#contact">Contact</a>
+</div>
+</nav>
 
-<a href="#contact" class="btn">Hire Me</a>
-<a href="cv.pdf" class="btn">Download CV</a>
+<div class="hero">
 
-</header>
+<img src="https://i.imgur.com/8Km9tLL.png">
 
-<section>
+<h1>Senior Laravel Developer</h1>
+
+<p>SaaS Architect • Backend Specialist • API Expert</p>
+
+<a class="btn" href="#contact">Hire Me</a>
+<a class="btn" href="Zuhair_Ahmed_Laravel_Developer_CV.docx">Download CV</a>
+
+</div>
+
+<section id="about">
 <h2>About Me</h2>
+
 <p>
-Senior Laravel Developer experienced in building SaaS platforms,
-enterprise dashboards, REST APIs and scalable backend systems.
-Specialized in performance optimization and clean architecture.
+I am a Senior Laravel Backend Developer with experience building SaaS platforms,
+enterprise dashboards, REST APIs, payment integrations and scalable backend
+architectures used in real production environments.
 </p>
+
 </section>
 
 <section>
+
 <h2>Skills</h2>
 
 <div class="skills">
@@ -134,57 +173,63 @@ Specialized in performance optimization and clean architecture.
 <span>MySQL</span>
 <span>Stripe</span>
 <span>PayPal</span>
-<span>Git</span>
+<span>System Design</span>
+<span>GitHub</span>
 <span>Linux</span>
 <span>Docker</span>
-<span>System Design</span>
 </div>
 
 </section>
 
-<section>
+<section id="projects">
+
 <h2>Projects</h2>
 
-<div class="project">
+<div class="projects">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1555421689-491a97ff2040">
+<div>
 <h3>Digi Store Direct</h3>
-<p>
-Developed SaaS digital marketplace enabling creators to sell downloadable
-products with payment integration and subscription system.
-</p>
+<p>SaaS digital marketplace with payment gateway and secure file delivery.</p>
+</div>
 </div>
 
-<div class="project">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71">
+<div>
 <h3>Mim Laas Platform</h3>
-<p>
-Built corporate multi-brand CMS platform managing multiple business
-ecosystems under centralized backend.
-</p>
+<p>Corporate multi-brand CMS platform with scalable backend architecture.</p>
+</div>
 </div>
 
-<div class="project">
-<h3>Inventory Management Dashboard</h3>
-<p>
-Created quantity tracking system with analytics, reporting and calendar-based data management.
-</p>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f">
+<div>
+<h3>Inventory Dashboard</h3>
+<p>Analytics and reporting dashboard for business inventory management.</p>
+</div>
+</div>
+
 </div>
 
 </section>
 
 <section id="contact">
+
 <h2>Contact</h2>
 
-<p>Email: yourmail@gmail.com</p>
-<p>Phone: +92-XXXXXXXX</p>
-<p>GitHub: github.com/yourusername</p>
-<p>LinkedIn: linkedin.com/in/yourusername</p>
+<p>Email: zuhairqr1@gmail.com</p>
+<p>Phone: 0341-3161686</p>
+<p>GitHub: github.com/zuhairqr1</p>
 
 </section>
 
 <footer>
-<p>© 2026 Xuhi Ahmed — Senior Laravel Developer</p>
+<p>© 2026 Zuhair Ahmed — Senior Laravel Developer</p>
 </footer>
 
-<a class="whatsapp" href="https://wa.me/923XXXXXXXXX">💬</a>
+<a class="whatsapp" href="https://wa.me/923413161686">💬</a>
 
 </body>
 </html>
