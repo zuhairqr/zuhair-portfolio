@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: zuhair-portfolio-chat
+    runtime: node
+    plan: free
+    buildCommand: node --check chat-server.mjs
+    startCommand: node chat-server.mjs
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: HOST
+        value: 0.0.0.0
+      - key: CHAT_PROVIDER
+        value: gemini
+      - key: CHAT_API_ONLY
+        value: "1"
+      - key: GEMINI_API_KEY
+        sync: false

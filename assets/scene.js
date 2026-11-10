@@ -13,12 +13,9 @@
   const titles = chapters.map(chapter => chapter.querySelector('h3').textContent);
   const title = scene.querySelector('.scene-title');
   const count = scene.querySelector('.scene-count');
+  const gauge = scene.querySelector('.scene-gauge-value');
   const hues = [271, 188, 324];
-  const rings = 84;
-  const sides = 10;
   const turn = Math.PI * 2;
-  const vertices = [];
-  const faces = [];
   let frame = 0;
   let chapterIndex = -1;
   let lastRender = '';
@@ -27,46 +24,8 @@
 
   const clamp = value => Math.min(1, Math.max(0, value));
 
-  function knotCenter(angle) {
-    const radius = 1.48 + .55 * Math.cos(3 * angle);
-    return [radius * Math.cos(2 * angle), radius * Math.sin(2 * angle), .62 * Math.sin(3 * angle)];
-  }
-
-  // Build a tube around a closed 3D curve. Adjacent rings share their edges.
-  for (let ring = 0; ring < rings; ring++) {
-    const angle = ring * turn / rings;
-    const [x, y, z] = knotCenter(angle);
-    const [nextX, nextY, nextZ] = knotCenter(angle + .001);
-    const length = Math.hypot(nextX - x, nextY - y, nextZ - z);
-    const tx = (nextX - x) / length;
-    const ty = (nextY - y) / length;
-    const tz = (nextZ - z) / length;
-    const horizontal = Math.hypot(tx, ty);
-    const nx = -ty / horizontal;
-    const ny = tx / horizontal;
-
-    for (let side = 0; side < sides; side++) {
-      const phase = side * turn / sides;
-      const radial = .28 * Math.cos(phase);
-      const vertical = .28 * Math.sin(phase);
-      vertices.push([
-        x + nx * radial - tz * ny * vertical,
-        y + ny * radial + tz * nx * vertical,
-        z + horizontal * vertical,
-      ]);
-
-      const nextRing = (ring + 1) % rings;
-      const nextSide = (side + 1) % sides;
-      faces.push([
-        ring * sides + side,
-        nextRing * sides + side,
-        nextRing * sides + nextSide,
-        ring * sides + nextSide,
-      ]);
-    }
-  }
-
-  function drawScene(width, height, progress, hue) {
+  function drawScene(width, height, progress, projectIndex) {
+    const hue = hues[projectIndex];
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
     const pixelWidth = Math.round(width * pixelRatio);
     const pixelHeight = Math.round(height * pixelRatio);
@@ -80,9 +39,9 @@
     const centerX = width * .5;
     const centerY = height * .52;
     const unit = Math.min(width, height) * .162;
-    const yaw = -.54 + progress * turn * 1.12;
-    const pitch = .49 + Math.sin(progress * turn) * .55;
-    const roll = -.21 + progress * .8;
+    const yaw = -.58 + progress * 1.16;
+    const pitch = -.43 - Math.sin(progress * Math.PI) * .15;
+    const roll = -.08 + progress * .16;
     const cosYaw = Math.cos(yaw);
     const sinYaw = Math.sin(yaw);
     const cosPitch = Math.cos(pitch);
@@ -119,37 +78,60 @@
     }
     context.setLineDash([]);
 
-    const points = vertices.map(project);
-    const layers = faces.map(indices => {
-      const corners = indices.map(index => points[index]);
-      const depth = corners.reduce((total, corner) => total + corner[2], 0) / corners.length;
-      return { corners, depth };
-    }).sort((a, b) => a.depth - b.depth);
-
-    for (const { corners, depth } of layers) {
-      const [a, b, c, d] = corners;
-      const lit = clamp(.38 + depth * .17 + (centerY - a[1]) / height * .58);
+    const accent = `hsl(${hue}, 88%, 74%)`;
+    const polygon = (corners, fill, outline) => {
+      const [first, ...rest] = corners.map(project);
       context.beginPath();
-      context.moveTo(a[0], a[1]);
-      context.lineTo(b[0], b[1]);
-      context.lineTo(c[0], c[1]);
-      context.lineTo(d[0], d[1]);
+      context.moveTo(first[0], first[1]);
+      for (const [x, y] of rest) context.lineTo(x, y);
       context.closePath();
-      context.fillStyle = `hsl(${hue + 27 - lit * 44}, 69%, ${12 + lit * 27}%)`;
-      context.strokeStyle = `hsla(${hue - 16}, 96%, ${57 + lit * 29}%, ${.25 + lit * .53})`;
+      context.fillStyle = fill;
       context.fill();
-      context.stroke();
+      if (outline) {
+        context.strokeStyle = outline;
+        context.stroke();
+      }
+    };
+    const deck = (l, b, r, f, fill, outline) =>
+      polygon([[l,.55,b], [r,.55,b], [r,.55,f], [l,.55,f]], fill, outline);
+    const screen = (l, t, r, b, fill, outline) => {
+      const point = (x, row) => [x, -1.49 + row * 2.04, -.99 + row * .24];
+      polygon([point(l,t), point(r,t), point(r,b), point(l,b)], fill, outline);
+    };
+
+    context.lineWidth = 1.1;
+    polygon([[-2.05,.55,1.42], [2.05,.55,1.42], [2.05,.69,1.42], [-2.05,.69,1.42]], '#171322', accent);
+    deck(-2.05, -.76, 2.05, 1.42, '#292339', accent);
+    deck(-1.78, -.52, 1.78, .55, '#15111f', '#554564');
+    for (let row = 0; row < 4; row++) {
+      const back = -.45 + row * .24;
+      for (let column = 0; column < 13; column++) {
+        const left = -1.7 + column * .26;
+        deck(left, back, left + .21, back + .17, '#493b59');
+      }
+    }
+    deck(-.58, .66, .58, 1.24, '#332a45', '#655477');
+
+    screen(-1.98, 0, 1.98, 1, '#171321', accent);
+    screen(-1.81, .08, 1.81, .91, '#100d19', '#57436b');
+    screen(-1.81, .08, 1.81, .19, '#332445');
+    screen(-1.81, .19, -1.15, .91, '#241b32');
+    for (const x of [-1.65, -1.49, -1.33]) screen(x, .123, x + .07, .15, accent);
+    for (const row of [.3, .43, .56, .69]) screen(-1.68, row, -1.27, row + .028, '#634f77');
+    const panels = [
+      [[-.99,.28,1.59,.37], [-.99,.45,.20,.78], [.32,.45,1.59,.78]],
+      [[-.99,.27,-.23,.82], [-.10,.27,.65,.82], [.78,.27,1.59,.82]],
+      [[-.99,.27,1.59,.47], [-.99,.53,.11,.81], [.24,.53,1.59,.81]],
+    ];
+    for (const [left, top, right, bottom] of panels[projectIndex]) {
+      screen(left, top, right, bottom, '#21172e', '#423151');
+      screen(left + .09, top + .034, right - .16, top + .055, accent);
+      if (bottom - top > .16) {
+        screen(left + .09, top + .105, right - .23, top + .124, '#76668c');
+        screen(left + .09, top + .148, right - .30, top + .164, '#4b3e61');
+      }
     }
 
-    context.fillStyle = `hsl(${hue}, 100%, 82%)`;
-    for (let index = 0; index < 4; index++) {
-      const angle = progress * turn * .75 + index * turn / 4;
-      const x = centerX + Math.cos(angle) * unit * 2.7;
-      const y = centerY + Math.sin(angle) * unit * 1.85;
-      context.beginPath();
-      context.arc(x, y, 1.7, 0, turn);
-      context.fill();
-    }
     scene.dataset.rendered = '';
   }
 
@@ -170,7 +152,8 @@
     if (bounds.bottom < 0 || bounds.top > viewport) return;
 
     const sequence = showcase.getBoundingClientRect();
-    const progress = motion.matches ? 0 : clamp((viewport * .64 - sequence.top) / sequence.height);
+    const progress = clamp((viewport * .64 - sequence.top) / Math.max(1, sequence.height - viewport * .30));
+    const rotation = motion.matches ? 0 : progress;
     const chapterGuide = stackedScene.matches ? bounds.bottom + 36 : viewport * .52;
     let index = 0;
     if (!motion.matches) {
@@ -189,9 +172,10 @@
     }
 
     scene.style.setProperty('--scene-progress', progress);
-    const renderKey = `${bounds.width}:${bounds.height}:${progress.toFixed(4)}:${index}`;
+    gauge.textContent = `${Math.round(progress * 100)}%`;
+    const renderKey = `${bounds.width}:${bounds.height}:${rotation.toFixed(4)}:${index}`;
     if (context && bounds.width && bounds.height && renderKey !== lastRender) {
-      drawScene(bounds.width, bounds.height, progress, hues[index]);
+      drawScene(bounds.width, bounds.height, rotation, index);
       lastRender = renderKey;
     }
   }
