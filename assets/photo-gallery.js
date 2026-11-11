@@ -3,23 +3,23 @@
   if (!gallery) return;
 
   const photos = [
-    ['assets/zuhair-ahmed-cyberpunk.jpg', 'Cyberpunk portrait', 'Digital portrait', 'The violet and cyan portrait from the original 3D portfolio.'],
-    ['assets/zuhair-editorial-portrait.jpg', 'Editorial portrait', 'Edited portrait', 'A seated portrait in a black suit, used on the portfolio homepage.'],
-    ['assets/zuhair-developer-workspace.jpg', 'Laravel workspace', 'Edited workspace', 'A warm edit of Zuhair working at a laptop beside the Laravel sign.'],
-    ['assets/zuhair-ahmed-portrait.jpg', 'Blue studio portrait', 'Portfolio archive', 'The blue-background portrait from the earlier portfolio.'],
-    ['assets/zuhair-ahmed-violet-portrait.jpg', 'Violet portrait', 'Portfolio archive', 'An earlier portfolio portrait with violet lighting.'],
-    ['1794340607648.jpg', 'Seated portrait', 'Original upload', 'Zuhair in a black shirt, resting his cheek against his hand.'],
-    ['1794340623860.jpg', 'Black suit', 'Original upload', 'The original seated suit portrait used for the homepage edit.'],
-    ['1794340644858.jpg', 'At the laptop', 'Original upload', 'The original workspace photo with a laptop and Laravel sign.'],
-    ['1794340665980.jpg', 'Arms crossed', 'Original upload', 'A standing portrait in a black shirt with arms crossed.'],
-    ['1794340682336.jpg', 'Headset portrait', 'Original upload', 'A portrait with a headset microphone against a blue backdrop.'],
-    ['1794340715537.jpg', 'Hoodie at the workstation', 'Original upload', 'Zuhair in a black hoodie in a developer workspace.'],
-    ['1794340736722.jpg', 'Outdoor portrait', 'Original upload', 'A portrait outdoors in a jacket and sunglasses.'],
-    ['1794340766246.jpg', 'Coffee at the desk', 'Original upload', 'Zuhair seated at a desk with a mug.'],
-    ['1794340784443.jpg', 'Suit and tie', 'Original upload', 'A formal portrait outdoors in a suit and tie.'],
-    ['1794340802970.jpg', 'Laravel studio portrait', 'Original upload', 'A violet and blue portrait with a Laravel sign in the background.'],
-    ['file_000000001498821195bf72eb83efc3c2.png', 'Portrait collection', 'Original montage', 'A contact sheet of portraits in different outfits and settings.', 'assets/gallery-portrait-montage.jpg'],
-    ['file_0000000047288211bd3bde7cf6334699.png', 'Developer montage', 'Original montage', 'A collage of developer and workspace portraits.', 'assets/gallery-developer-montage.jpg'],
+    ['assets/zuhair-ahmed-cyberpunk.jpg', 'Build for change', 'Development', 'Good software makes the next change easier to ship.', 'Zuhair’s cyberpunk portrait in violet and cyan light.'],
+    ['assets/zuhair-editorial-portrait.jpg', 'Make ownership clear', 'Management', 'Give every decision an owner and every handoff a next step.', 'Zuhair seated in a black suit.'],
+    ['assets/zuhair-developer-workspace.jpg', 'Start with the workflow', 'Development', 'Watch how people do the work before deciding what to automate.', 'Zuhair at a laptop beside a Laravel sign.'],
+    ['assets/zuhair-ahmed-portrait.jpg', 'Show work early', 'Management', 'A working demo gives the team something concrete to improve.', 'Zuhair against a blue studio backdrop.'],
+    ['assets/zuhair-ahmed-violet-portrait.jpg', 'Write for the next developer', 'Development', 'A clear name can save the next person an afternoon of debugging.', 'Zuhair in violet studio lighting.'],
+    ['1794340607648.jpg', 'Ask better questions', 'Management', 'Find out what a successful day looks like for the people using the software.', 'Zuhair seated in a black shirt with his hand against his cheek.'],
+    ['1794340623860.jpg', 'Keep priorities visible', 'Management', 'When priorities change, tell the team what moved and why.', 'Zuhair seated in a black suit.'],
+    ['1794340644858.jpg', 'Design APIs for callers', 'Development', 'Clear responses help clients handle both success and failure.', 'Zuhair working at a laptop near a Laravel sign.'],
+    ['1794340665980.jpg', 'Lead with clarity', 'Management', 'A clear decision gives the team room to move.', 'Zuhair standing in a black shirt with his arms crossed.'],
+    ['1794340682336.jpg', 'Share context early', 'Management', 'Explain why a decision was made so others can make the next one.', 'Zuhair with a headset against a blue backdrop.'],
+    ['1794340715537.jpg', 'Make failures diagnosable', 'Development', 'Log enough context to trace a failed request from start to finish.', 'Zuhair in a black hoodie at a workstation.'],
+    ['1794340736722.jpg', 'Protect focus', 'Management', 'Give the team time to finish the work that matters most.', 'Zuhair outdoors in a jacket and sunglasses.'],
+    ['1794340766246.jpg', 'Measure before tuning', 'Development', 'Find the slow query before adding a cache.', 'Zuhair seated at a desk with a mug.'],
+    ['1794340784443.jpg', 'Keep handoffs usable', 'Management', 'Leave the next person the context, the open question, and the next action.', 'Zuhair outdoors in a suit and tie.'],
+    ['1794340802970.jpg', 'Ship changes you can verify', 'Development', 'A release is easier to trust when the team knows how to check it.', 'Zuhair in blue and violet light beside a Laravel sign.'],
+    ['file_000000001498821195bf72eb83efc3c2.png', 'Make progress visible', 'Management', 'Show what shipped and what still needs a decision.', 'A collage of Zuhair’s portraits.', 'assets/gallery-portrait-montage.jpg'],
+    ['file_0000000047288211bd3bde7cf6334699.png', 'Automate repeated work', 'Development', 'Start where people spend time repeating the same steps.', 'A collage of developer and workspace portraits.', 'assets/gallery-developer-montage.jpg'],
   ];
 
   const preview = gallery.querySelector('.photo-preview');
@@ -36,7 +36,7 @@
   let active = 0;
   let transition;
 
-  const buttons = photos.map(([src, name, , , thumbnail], index) => {
+  const buttons = photos.map(([src, name, , , , thumbnail], index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('aria-label', `Photo ${index + 1} of ${photos.length}: ${name}`);
@@ -52,7 +52,7 @@
   });
 
   function updateDialog() {
-    const [src, name, , alt] = photos[active];
+    const [src, name, , , alt] = photos[active];
     dialogTitle.textContent = name;
     dialogImage.src = src;
     dialogImage.alt = alt;
@@ -60,13 +60,13 @@
 
   function select(index, initial = false) {
     active = (index + photos.length) % photos.length;
-    const [src, name, category, caption] = photos[active];
+    const [src, name, category, quote, alt] = photos[active];
     preview.href = src;
-    image.alt = caption;
+    image.alt = alt;
     if (!initial) image.src = src;
     title.textContent = name;
     type.textContent = category;
-    description.textContent = caption;
+    description.textContent = `“${quote}”`;
     count.textContent = `${String(active + 1).padStart(2, '0')} / ${photos.length}`;
 
     buttons.forEach((button, i) => {
