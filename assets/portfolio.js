@@ -113,6 +113,73 @@ const robotEndpoint = configuredChat === '/api/chat' || /^https:\/\//i.test(conf
   : localChat ? `${location.protocol}//${location.hostname}:8767/api/chat` : '';
 const conversation = [];
 let robotPending = false;
+const voiceControls = robot.querySelector('.robot-voice-controls');
+const voiceToggle = robot.querySelector('.robot-voice-toggle');
+const voiceReplay = robot.querySelector('.robot-voice-replay');
+const voiceStop = robot.querySelector('.robot-voice-stop');
+const voiceStatus = robot.querySelector('.robot-voice-status');
+const speechAvailable = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+let voiceEnabled = false;
+let lastSpokenReply = '';
+let lastReplyLanguage = 'auto';
+let currentSpeech;
+
+function stopRobotVoice() {
+  if (speechAvailable && currentSpeech) {
+    currentSpeech.onend = null;
+    currentSpeech.onerror = null;
+    window.speechSynthesis.cancel();
+  }
+  currentSpeech = undefined;
+  robot.removeAttribute('data-speaking');
+  voiceStop.disabled = true;
+  voiceStatus.textContent = '';
+}
+
+function speakRobotReply() {
+  if (!speechAvailable || !lastSpokenReply) return;
+  stopRobotVoice();
+  const utterance = new SpeechSynthesisUtterance(lastSpokenReply);
+  const voices = window.speechSynthesis.getVoices();
+  const urduScript = /[\u0600-\u06ff]/.test(lastSpokenReply);
+  const roman = lastReplyLanguage === 'roman-urdu' ||
+    (lastReplyLanguage === 'auto' && /\b(kya|mein|aap|hai|hain|kaam|kiya|karna|aur)\b/i.test(lastSpokenReply));
+  const preferred = urduScript ? ['ur-PK', 'ur-IN'] : roman ? ['en-IN', 'en-PK', 'en-GB'] : ['en-US', 'en-GB'];
+  utterance.voice = preferred.map(language => voices.find(voice => voice.lang.toLowerCase() === language.toLowerCase())).find(Boolean)
+    ?? voices.find(voice => voice.lang.startsWith(urduScript ? 'ur' : 'en')) ?? null;
+  utterance.lang = utterance.voice?.lang || preferred[0];
+  utterance.rate = roman ? .9 : .97;
+  utterance.onstart = () => {
+    robot.dataset.speaking = '';
+    voiceStop.disabled = false;
+    voiceStatus.textContent = 'Speaking';
+  };
+  utterance.onend = () => {
+    if (currentSpeech !== utterance) return;
+    currentSpeech = undefined;
+    robot.removeAttribute('data-speaking');
+    voiceStop.disabled = true;
+    voiceStatus.textContent = '';
+  };
+  utterance.onerror = () => {
+    if (currentSpeech !== utterance) return;
+    stopRobotVoice();
+    voiceStatus.textContent = 'Voice unavailable. Try Replay.';
+  };
+  currentSpeech = utterance;
+  window.speechSynthesis.speak(utterance);
+}
+
+voiceControls.hidden = !speechAvailable;
+voiceToggle.addEventListener('click', () => {
+  voiceEnabled = !voiceEnabled;
+  voiceToggle.setAttribute('aria-pressed', String(voiceEnabled));
+  voiceToggle.textContent = voiceEnabled ? 'Voice on' : 'Voice off';
+  if (!voiceEnabled) stopRobotVoice();
+});
+voiceReplay.addEventListener('click', speakRobotReply);
+voiceStop.addEventListener('click', stopRobotVoice);
+window.addEventListener('pagehide', stopRobotVoice);
 
 function addRobotMessage(role, content) {
   const message = document.createElement('p');
@@ -133,6 +200,7 @@ function setRobotOpen(open) {
     robotClose.focus();
     robotTranscript.scrollTop = robotTranscript.scrollHeight;
   } else {
+    stopRobotVoice();
     robotLaunch.focus();
   }
 }
@@ -147,6 +215,9 @@ robotPause.addEventListener('click', () => {
   robotPause.setAttribute('aria-pressed', String(paused));
 });
 robotClear.addEventListener('click', () => {
+  stopRobotVoice();
+  lastSpokenReply = '';
+  voiceReplay.disabled = true;
   conversation.length = 0;
   robotMessages.replaceChildren();
   addRobotMessage('assistant', 'New chat started. Ask me about Zuhair’s portfolio.');
@@ -161,6 +232,8 @@ async function askRobot(question) {
     return;
   }
   robotPending = true;
+  stopRobotVoice();
+  const requestedLanguage = robotLanguage.value;
   robotSend.disabled = true;
   robotClear.disabled = true;
   robotPrompts.forEach(button => { button.disabled = true; });
@@ -175,7 +248,7 @@ async function askRobot(question) {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'omit',
       signal: AbortSignal.timeout(localChat ? 35_000 : 105_000),
-      body: JSON.stringify({ messages: [...conversation.slice(-8), user], language: robotLanguage.value }),
+      body: JSON.stringify({ messages: [...conversation.slice(-8), user], language: requestedLanguage }),
     });
     const data = await response.json();
     if (!response.ok || !data.reply) throw new Error(data.error || 'The AI did not return a reply.');
@@ -183,6 +256,10 @@ async function askRobot(question) {
     if (conversation.length > 8) conversation.splice(0, conversation.length - 8);
     pending.dataset.role = 'assistant';
     pending.textContent = data.reply;
+    lastSpokenReply = data.reply;
+    lastReplyLanguage = requestedLanguage;
+    voiceReplay.disabled = false;
+    if (voiceEnabled && !robotPanel.hidden) speakRobotReply();
   } catch (error) {
     pending.dataset.role = 'error';
     pending.textContent = error instanceof TypeError || error.name === 'TimeoutError'

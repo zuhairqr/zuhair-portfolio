@@ -41,6 +41,8 @@ const staticFiles = new Map([
   ['/assets/portfolio.js', ['assets/portfolio.js', 'text/javascript; charset=utf-8']],
   ['/assets/scene.js', ['assets/scene.js', 'text/javascript; charset=utf-8']],
   ['/assets/zuhair-ahmed-cyberpunk.jpg', ['assets/zuhair-ahmed-cyberpunk.jpg', 'image/jpeg']],
+  ['/assets/zuhair-editorial-portrait.jpg', ['assets/zuhair-editorial-portrait.jpg', 'image/jpeg']],
+  ['/assets/zuhair-developer-workspace.jpg', ['assets/zuhair-developer-workspace.jpg', 'image/jpeg']],
 ]);
 const requestTimes = new Map();
 let budget = { day: '', requests: 0 };
