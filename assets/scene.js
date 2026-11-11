@@ -5,6 +5,7 @@
   const hero = document.querySelector('.hero');
   const portraitDepth = hero.querySelector('.portrait-depth');
   const portrait = portraitDepth.querySelector('.portrait-card');
+  const photoPanels = document.querySelectorAll('.workspace-portraits, .career-portraits');
   const showcase = document.querySelector('.showcase-grid');
   const scene = showcase.querySelector('.scene');
   const canvas = scene.querySelector('canvas');
@@ -146,6 +147,17 @@
       portrait.style.setProperty('--portrait-travel', `${depth * 12}px`);
       portrait.style.setProperty('--portrait-axis', tilt ? `${-pointerY} ${pointerX} 0` : '0 1 0');
       portrait.style.setProperty('--portrait-turn', `${tilt}deg`);
+      portraitDepth.style.setProperty('--orbit-x', `${pointerX * 20}px`);
+      portraitDepth.style.setProperty('--orbit-y', `${pointerY * 15 - depth * 46}px`);
+    }
+
+    if (!motion.matches) {
+      for (const panel of photoPanels) {
+        const area = panel.getBoundingClientRect();
+        if (area.bottom < 0 || area.top > viewport) continue;
+        const progress = clamp((viewport - area.top) / (viewport + area.height));
+        panel.style.setProperty('--photo-scroll', `${(progress - .5) * 56}px`);
+      }
     }
 
     const bounds = scene.getBoundingClientRect();

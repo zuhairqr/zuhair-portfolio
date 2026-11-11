@@ -1,0 +1,159 @@
+.portrait-scene {
+  position: relative;
+  isolation: isolate;
+  padding-block: 7% 9%;
+}
+
+.portrait-scene > .portrait-card {
+  z-index: 1;
+  width: 66%;
+  margin-inline: auto;
+  aspect-ratio: 4 / 5;
+}
+
+.portrait-orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.portrait-orbit::before {
+  content: "";
+  position: absolute;
+  inset: 1% -4%;
+  border: 1px solid #b6a0ff45;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #8a48b949, transparent 67%);
+  rotate: -22deg;
+}
+
+.portrait-satellite {
+  position: absolute;
+  width: 29%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 24%;
+  border: 1px solid #c5a1fa8c;
+  border-radius: .75rem;
+  box-shadow: 0 .8rem 2rem #080410be, 0 0 1.7rem #9250e445;
+  transform: rotate(var(--slant));
+}
+
+.satellite-left { top: 5%; left: 0; --slant: -13deg; --drift: 1; }
+.satellite-right { top: 10%; right: 0; --slant: 12deg; --drift: -.8; }
+.satellite-lower-left { bottom: 3%; left: 2%; z-index: 2; width: 23%; --slant: -10deg; --drift: -.75; }
+.satellite-lower-right { bottom: 0; right: 3%; z-index: 2; width: 24%; --slant: 10deg; --drift: .85; }
+
+.career-portraits {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(.35rem, 1.4vw, 1rem);
+  margin-top: clamp(1.4rem, 3vw, 2.5rem);
+  padding-block: .8rem;
+}
+
+.career-portraits img,
+.workspace-panels img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center 25%;
+  border: 1px solid #9470ba;
+  border-radius: .7rem;
+  box-shadow: 0 .8rem 1.75rem #0c081577;
+}
+
+.career-portraits img:nth-child(even) { --direction: -1; }
+
+.workspace-portraits {
+  position: relative;
+  align-self: center;
+  min-width: 0;
+}
+
+.workspace-main {
+  position: relative;
+  margin: 0 0 -6% 0;
+  overflow: hidden;
+  border: 1px solid #aa78d3;
+  border-radius: 1rem;
+  box-shadow: 0 1rem 3rem #10091a80, 0 0 2rem #ad73e52b;
+}
+
+.workspace-main img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.workspace-panels {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .45rem;
+  margin-inline: 5%;
+}
+
+.workspace-panels img {
+  aspect-ratio: 4 / 5;
+  background: #1c1428;
+}
+
+.workspace-panels img:last-child { object-fit: contain; }
+
+.contact-portraits {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1rem;
+}
+
+.contact-portraits img {
+  width: clamp(3rem, 7vw, 5.25rem);
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center 24%;
+  border: 1px solid #b294d3;
+  border-radius: .6rem;
+  box-shadow: 0 .5rem 1rem #080410a8;
+  rotate: -12deg;
+}
+
+.contact-portraits img + img {
+  margin-left: -.4rem;
+  rotate: 9deg;
+}
+
+@media (max-width: 38rem) {
+  .career-portraits img { aspect-ratio: 3 / 4; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .portrait-satellite {
+    translate: calc(var(--orbit-x, 0px) * var(--drift)) calc(var(--orbit-y, 0px) * var(--drift));
+    animation: satellite-arrival .85s cubic-bezier(.2,.65,.25,1) both;
+  }
+
+  .satellite-right, .satellite-lower-left { animation-delay: .1s; }
+  .satellite-lower-right { animation-delay: .18s; }
+
+  @keyframes satellite-arrival {
+    from { opacity: 0; scale: .85; transform: rotate(0deg); }
+  }
+
+  .career-portraits img { translate: 0 calc(var(--photo-scroll, 0px) * var(--direction, 1) * .45); }
+  .workspace-main { translate: 0 calc(var(--photo-scroll, 0px) * -.2); }
+  .workspace-panels { translate: 0 calc(var(--photo-scroll, 0px) * .65); }
+  .career-portraits img, .workspace-panels img { transition: scale .26s ease, box-shadow .26s ease; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .career-portraits img:hover, .workspace-panels img:hover {
+      position: relative;
+      z-index: 1;
+      scale: 1.075;
+      box-shadow: 0 .8rem 1.75rem #0c0815a8, 0 0 1.2rem #be86ff65;
+    }
+  }
+}

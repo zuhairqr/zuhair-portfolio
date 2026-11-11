@@ -12,6 +12,7 @@
   <script src="assets/portfolio.js" defer></script>
   <link rel="stylesheet" href="assets/photo-gallery.css">
   <script src="assets/photo-gallery.js" defer></script>
+  <link rel="stylesheet" href="assets/photo-motion.css">
   <meta name="portfolio-chat-endpoint" content="">
   <script src="assets/scene.js" defer></script>
   <style>
@@ -906,7 +907,13 @@
           </button>
         </div>
 
-        <div class="portrait-depth">
+        <div class="portrait-depth portrait-scene">
+          <div class="portrait-orbit" aria-hidden="true">
+            <img class="portrait-satellite satellite-left" src="assets/zuhair-ahmed-cyberpunk.jpg" alt="" decoding="async">
+            <img class="portrait-satellite satellite-right" src="1794340665980.jpg" alt="" decoding="async">
+            <img class="portrait-satellite satellite-lower-left" src="1794340784443.jpg" alt="" decoding="async">
+            <img class="portrait-satellite satellite-lower-right" src="1794340802970.jpg" alt="" decoding="async">
+          </div>
           <figure class="portrait-card">
             <img src="assets/zuhair-editorial-portrait.jpg" alt="Zuhair Ahmed in a black suit with subtle cyan and violet lighting" width="1122" height="1402" fetchpriority="high">
             <span class="eyebrow portrait-location">
@@ -1416,20 +1423,31 @@
           </div>
         </div>
       </div>
+      <div class="career-portraits" aria-hidden="true">
+        <img src="1794340607648.jpg" alt="" loading="lazy" decoding="async">
+        <img src="1794340623860.jpg" alt="" loading="lazy" decoding="async">
+        <img src="1794340682336.jpg" alt="" loading="lazy" decoding="async">
+        <img src="1794340736722.jpg" alt="" loading="lazy" decoding="async">
+      </div>
     </section>
 
     <section class="wrap section about-grid" id="about" aria-labelledby="about-title">
       <div class="about-copy">
         <p class="eyebrow">About</p>
         <h2 id="about-title">I build and maintain business software.</h2>
-        <figure class="about-photo">
-          <img src="assets/zuhair-developer-workspace.jpg" alt="Zuhair Ahmed working on a laptop in a softly lit workspace" width="1536" height="1024" loading="lazy" decoding="async">
-          <figcaption>Laravel applications, APIs, and automation.</figcaption>
-        </figure>
-      </div>
-      <div class="about-copy">
         <p>I work across the application, from modeling data and building Laravel APIs to shipping checkout flows, admin dashboards, and the tools teams use to manage their work.</p>
         <p>I also build automation for tasks like collecting leads, reviewing outreach, and tracking AI usage.</p>
+      </div>
+      <div class="workspace-portraits">
+        <figure class="workspace-main">
+          <img src="assets/zuhair-developer-workspace.jpg" alt="Zuhair Ahmed working on a laptop in a softly lit workspace" width="1536" height="1024" loading="lazy" decoding="async">
+        </figure>
+        <div class="workspace-panels" aria-hidden="true">
+          <img src="1794340644858.jpg" alt="" loading="lazy" decoding="async">
+          <img src="1794340715537.jpg" alt="" loading="lazy" decoding="async">
+          <img src="1794340766246.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery-developer-montage.jpg" alt="" loading="lazy" decoding="async">
+        </div>
       </div>
     </section>
 
@@ -1464,6 +1482,10 @@
     </section>
 
     <section class="wrap contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact-portraits" aria-hidden="true">
+        <img src="assets/gallery-portrait-montage.jpg" alt="" loading="lazy" decoding="async">
+        <img src="assets/zuhair-ahmed-portrait.jpg" alt="" loading="lazy" decoding="async">
+      </div>
       <div class="contact-intro">
         <p class="eyebrow">Contact</p>
         <h2 id="contact-title">Let’s talk about your project.</h2>
