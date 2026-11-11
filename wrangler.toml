@@ -1,0 +1,15 @@
+name = "zuhair-portfolio-chat"
+main = "chat-worker.mjs"
+compatibility_date = "2026-07-15"
+workers_dev = true
+preview_urls = false
+
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true
+
+[[ratelimits]]
+name = "CHAT_LIMITER"
+namespace_id = "506271"
+simple = { limit = 8, period = 60 }

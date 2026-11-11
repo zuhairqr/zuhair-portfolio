@@ -4,6 +4,20 @@ Run `node chat-server.mjs` with Node.js 20+ and a valid `GEMINI_API_KEY` set in 
 
 The local app serves the portfolio at `http://127.0.0.1:8767/`. The existing static preview on port 8766 can call the same local backend.
 
+## Cloudflare Workers Free and GitHub Pages
+
+From the repository root with Node.js 22.12+ and a current Wrangler:
+
+```sh
+npx wrangler login --browser=false
+npx wrangler deploy
+npx wrangler secret put GEMINI_API_KEY
+```
+
+You can also add `GEMINI_API_KEY` as a **Secret** in the Worker's **Settings → Variables and Secrets**. Use a Google AI Studio project on the Gemini free tier to stay within its free quota.
+
+Once `/healthz` reports `chatConfigured: true`, send a Roman Urdu and an English question to `POST /api/chat`. Set the `portfolio-chat-endpoint` meta tag in `index.html` to the verified Worker's HTTPS URL ending in `/api/chat`, then publish GitHub Pages. The portfolio uses browser speech synthesis for playback.
+
 ## Render Free and GitHub Pages
 
 1. Push the portfolio source to GitHub. Keep `.env.local` on your computer.
@@ -13,6 +27,6 @@ The local app serves the portfolio at `http://127.0.0.1:8767/`. The existing sta
 
 Render’s free service can sleep when idle. The first chat request after idle may take about a minute.
 
-GitHub Pages serves the static site. Deploy `chat-server.mjs` together with `index.html` to a Node.js host and set `GEMINI_API_KEY` in that host’s secret settings. Set `HOST=0.0.0.0` if the host requires it. Set the `portfolio-chat-endpoint` meta tag in `index.html` to the backend’s HTTPS `/api/chat` URL before publishing the frontend. The GitHub Pages origin `https://zuhairqr.github.io` is already allowed. For a custom frontend domain, set `CHAT_ALLOWED_ORIGINS` to its origin.
+GitHub Pages serves the static site. Deploy `chat-server.mjs`, `chat-core.mjs`, and `index.html` to a Node.js host and set `GEMINI_API_KEY` in that host’s secret settings. Set `HOST=0.0.0.0` if the host requires it. Set the `portfolio-chat-endpoint` meta tag in `index.html` to the backend’s HTTPS `/api/chat` URL before publishing the frontend. The GitHub Pages origin `https://zuhairqr.github.io` is already allowed. For a custom frontend domain, set `CHAT_ALLOWED_ORIGINS` to its origin.
 
 The server reads public portfolio sections at startup to ground the model’s answers. Restart the backend after changing those sections. Requests have size, rate, concurrency, and daily limits. The limits are per running server and reset when it restarts. Keep provider-side spending controls for public hosting.
