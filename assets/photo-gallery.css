@@ -1,0 +1,226 @@
+#photos h2 {
+  margin-bottom: 1.15rem;
+}
+
+.photo-gallery {
+  --photo-accent: #d9b2ff;
+  overflow: hidden;
+  border: 1px solid #624578;
+  border-radius: 1.35rem;
+  background: #171022;
+  box-shadow: 0 28px 72px #09040f70;
+}
+
+.photo-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr);
+  align-items: center;
+  gap: clamp(1.3rem, 4vw, 4rem);
+  padding: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(ellipse at 78% 30%, #7442a661, transparent 55%),
+    repeating-linear-gradient(90deg, transparent 0 47px, #ba9aff0b 47px 48px),
+    linear-gradient(120deg, #130d1d, #231433 70%, #121321);
+}
+
+.photo-story {
+  min-width: 0;
+}
+
+.photo-type {
+  margin: 0 0 .65rem;
+  color: var(--photo-accent);
+  font: 700 .72rem/1.4 ui-monospace, monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.photo-name {
+  margin: 0;
+  font-size: clamp(1.8rem, 4.5vw, 3.85rem);
+  line-height: .99;
+  letter-spacing: -.055em;
+}
+
+.photo-description {
+  min-height: 3em;
+  margin: .85rem 0 1.45rem;
+  color: #dacbe5;
+}
+
+.photo-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: clamp(19rem, 42vw, 33rem);
+  overflow: hidden;
+  border: 1px solid #c498ed6e;
+  border-radius: 1rem;
+  background: radial-gradient(ellipse at 50% 28%, #472962, #100b18 75%);
+  box-shadow: 0 22px 48px #09040fb0, inset 0 0 28px #a66ced24;
+}
+
+.photo-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.photo-preview span {
+  position: absolute;
+  right: .75rem;
+  bottom: .75rem;
+  padding: .45rem .72rem;
+  border: 1px solid #c498ed90;
+  border-radius: 2rem;
+  background: #171022e8;
+  color: #fff;
+  font-size: .77rem;
+}
+
+.photo-controls {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+}
+
+.photo-controls button,
+.photo-dialog button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid #9973b7;
+  border-radius: 50%;
+  background: #2c1b41;
+  color: #fff;
+  font: 1.2rem/1 ui-monospace, monospace;
+  cursor: pointer;
+}
+
+.photo-controls button:hover,
+.photo-dialog button:hover {
+  background: #533471;
+}
+
+.photo-count {
+  min-width: 6ch;
+  margin: 0;
+  color: var(--photo-accent);
+  text-align: center;
+  font: .8rem/1 ui-monospace, monospace;
+}
+
+.photo-filmstrip {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-width: 0;
+  overflow-x: auto;
+  padding: .9rem clamp(.85rem, 4vw, 3rem) 1.05rem;
+  border-top: 1px solid #614878;
+  background: linear-gradient(180deg, #221530, #140d20);
+  scroll-snap-type: x proximity;
+  scrollbar-color: #956cbb #20152d;
+}
+
+.photo-filmstrip button {
+  flex: 0 0 clamp(3.75rem, 7vw, 5.75rem);
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #8765a6;
+  border-radius: .55rem;
+  background: #291d37;
+  opacity: .72;
+  transform: perspective(340px) rotateY(var(--thumb-angle, 0deg));
+  transition: transform .28s ease, opacity .25s ease, border-color .25s ease;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.photo-filmstrip img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 32%;
+}
+
+.photo-filmstrip button:hover,
+.photo-filmstrip button[aria-pressed="true"] {
+  opacity: 1;
+  border-color: var(--photo-accent);
+  transform: translateY(-.18rem);
+}
+
+.photo-gallery :is(a, button):focus-visible {
+  outline: 2px solid #f5ddff;
+  outline-offset: 3px;
+}
+
+.photo-dialog {
+  position: fixed;
+  inset: 0;
+  width: fit-content;
+  max-width: min(94vw, 78rem);
+  max-height: 92vh;
+  margin: auto;
+  padding: .75rem;
+  border: 1px solid #8963ac;
+  border-radius: 1rem;
+  background: #181024;
+  color: #fff;
+}
+
+.photo-dialog::backdrop {
+  background: #09050eec;
+}
+
+.photo-dialog header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .9rem;
+  margin-bottom: .65rem;
+}
+
+.photo-dialog h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.photo-dialog img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 77vh;
+  margin: auto;
+  border-radius: .5rem;
+}
+
+@media (max-width: 680px) {
+  .photo-stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .photo-preview {
+    grid-row: 1;
+    height: clamp(16rem, 82vw, 25rem);
+  }
+
+  .photo-description {
+    min-height: 0;
+    margin-bottom: .8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-filmstrip button {
+    transition: none;
+    transform: none;
+  }
+}

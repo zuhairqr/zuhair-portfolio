@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
   <script src="assets/portfolio.js" defer></script>
+  <link rel="stylesheet" href="assets/photo-gallery.css">
+  <script src="assets/photo-gallery.js" defer></script>
   <meta name="portfolio-chat-endpoint" content="">
   <script src="assets/scene.js" defer></script>
   <style>
@@ -829,6 +831,7 @@
         <a href="#work">Projects</a>
         <a href="#experience">Experience</a>
         <a href="#skills">Tech stack</a>
+        <a href="#photos">Photos</a>
         <a class="nav-contact" href="#contact">Contact</a>
       </nav>
     </div>
@@ -1427,6 +1430,36 @@
       <div class="about-copy">
         <p>I work across the application, from modeling data and building Laravel APIs to shipping checkout flows, admin dashboards, and the tools teams use to manage their work.</p>
         <p>I also build automation for tasks like collecting leads, reviewing outreach, and tracking AI usage.</p>
+      </div>
+    </section>
+
+    <section class="wrap section" id="photos" aria-labelledby="photos-title">
+      <h2 id="photos-title">Portraits &amp; workspace</h2>
+      <div class="photo-gallery" data-photo-gallery>
+        <div class="photo-stage">
+          <div class="photo-story">
+            <p class="photo-type">Digital portrait</p>
+            <h3 class="photo-name" id="photo-name">Cyberpunk portrait</h3>
+            <p class="photo-description">The violet and cyan portrait from the original 3D portfolio.</p>
+            <div class="photo-controls">
+              <button type="button" data-photo-step="-1" aria-label="Previous photo">←</button>
+              <p class="photo-count" role="status" aria-atomic="true"></p>
+              <button type="button" data-photo-step="1" aria-label="Next photo">→</button>
+            </div>
+          </div>
+          <a class="photo-preview" href="assets/zuhair-ahmed-cyberpunk.jpg" aria-labelledby="photo-open photo-name">
+            <img src="assets/zuhair-ahmed-cyberpunk.jpg" alt="Zuhair's cyberpunk portrait with violet and cyan lighting" loading="lazy" decoding="async">
+            <span id="photo-open">View full image ↗</span>
+          </a>
+        </div>
+        <div class="photo-filmstrip" role="group" aria-label="Gallery photos"></div>
+        <dialog class="photo-dialog" aria-labelledby="photo-dialog-title">
+          <header>
+            <h3 id="photo-dialog-title"></h3>
+            <form method="dialog"><button type="submit" aria-label="Close full image">×</button></form>
+          </header>
+          <img alt="">
+        </dialog>
       </div>
     </section>
 
