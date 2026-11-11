@@ -1,6 +1,8 @@
 .portrait-scene {
   position: relative;
   isolation: isolate;
+  overflow: clip;
+  overflow-clip-margin: 12px;
   padding-block: 7% 9%;
 }
 
